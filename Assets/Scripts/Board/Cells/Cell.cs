@@ -12,5 +12,10 @@ namespace Ninez.Board
             get { return m_CellType; }
             set { m_CellType = value; }
         }
+
+        public Cell(CellType cellType)
+        {
+            m_CellType = cellType;
+        }
     }
 }

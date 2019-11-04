@@ -12,5 +12,10 @@ namespace Ninez.Board
             get { return m_BlockType; }
             set { m_BlockType = value; }
         }
+
+        public Block(BlockType blockType)
+        {
+            m_BlockType = blockType;
+        }
     }
 }
