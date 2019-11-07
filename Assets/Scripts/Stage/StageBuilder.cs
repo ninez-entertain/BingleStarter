@@ -38,13 +38,23 @@ namespace Ninez.Stage
             return stage;
         }
 
-
+        /// <summary>
+        /// 지정된 위치에 적합한 Block 객체를 생성한다. 
+        /// </summary>
+        /// <param name="nRow">행</param>
+        /// <param name="nCol">열</param>
+        /// <returns></returns>
         Block SpawnBlockForStage(int nRow, int nCol)
         {
             return new Block(BlockType.BASIC);
-            //return new Block(nRow == nCol ? BlockType.EMPTY : BlockType.BASIC);
         }
 
+        /// <summary>
+        /// 지정된 위치에 적합한 Cell 객체를 생성한다.
+        /// </summary>
+        /// <param name="nRow"></param>
+        /// <param name="nCol"></param>
+        /// <returns></returns>
         Cell SpawnCellForStage(int nRow, int nCol)
         {
             return new Cell(nRow == nCol ? CellType.EMPTY : CellType.BASIC);
@@ -60,7 +70,7 @@ namespace Ninez.Stage
         public static Stage BuildStage(int nStage, int row, int col)
         {
             StageBuilder stageBuilder = new StageBuilder(0);
-            Stage stage = stageBuilder.ComposeStage(9, 9);
+            Stage stage = stageBuilder.ComposeStage(row, col);
 
             return stage;
         }

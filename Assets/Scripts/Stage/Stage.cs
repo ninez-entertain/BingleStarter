@@ -20,7 +20,8 @@ namespace Ninez.Stage
         public Cell[,] cells { get { return m_Board.cells; } }
 
         /// <summary>
-        /// 
+        /// 생성자.
+        /// 주어진 크기를 갖는 Board를 생성한다.
         /// </summary>
         /// <param name="stageBuilder"></param>
         /// <param name="nRow"></param>
@@ -30,6 +31,17 @@ namespace Ninez.Stage
             m_StageBuilder = stageBuilder;
 
             m_Board = new Ninez.Board.Board(nRow, nCol);
+        }
+
+        /// <summary>
+        /// 주어진 정보(Cell/Block Prefab, 컨테이너)를 이용해서 Board를 구성한다.
+        /// </summary>
+        /// <param name="cellPrefab">Cell Prefab</param>
+        /// <param name="blockPrefab">Board Prefab</param>
+        /// <param name="container">Cell/Board GameObject의 부모 GameObject</param>
+        internal void ComposeStage(GameObject cellPrefab, GameObject blockPrefab, Transform container)
+        {
+            m_Board.ComposeStage(cellPrefab, blockPrefab, container);
         }
 
         public void PrintAll()
