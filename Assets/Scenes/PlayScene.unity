@@ -166,7 +166,8 @@ MonoBehaviour:
   m_Container: {fileID: 435568012}
   m_CellPrefab: {fileID: 7854952908377182720, guid: 774c924614d694b9abba7aaed0236867,
     type: 3}
-  m_BlockPrefab: {fileID: 0}
+  m_BlockPrefab: {fileID: 7274918146034523890, guid: f9ff182ef6a2e4109832628c0cab1f2a,
+    type: 3}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

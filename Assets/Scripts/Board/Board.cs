@@ -45,11 +45,11 @@ namespace Ninez.Board
             for (int nRow = 0; nRow < m_nRow; nRow++)
                 for (int nCol = 0; nCol < m_nCol; nCol++)
                 {
-                    //Block block = m_Blocks[nRow, nCol]?.InstantiateBlockObj(boardConfig.blockPrefab, containerObj);
-                    //block?.Move(initX + nCol, initY + nRow);
-
                     Cell cell = m_Cells[nRow, nCol]?.InstantiateCellObj(cellPrefab, container); ;
                     cell?.Move(initX + nCol, initY + nRow);
+
+                    Block block = m_Blocks[nRow, nCol]?.InstantiateBlockObj(blockPrefab, container);
+                    block?.Move(initX + nCol, initY + nRow);
                 }
         }
 
