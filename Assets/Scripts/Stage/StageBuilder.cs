@@ -46,7 +46,7 @@ namespace Ninez.Stage
         /// <returns></returns>
         Block SpawnBlockForStage(int nRow, int nCol)
         {
-            return new Block(BlockType.BASIC);
+            return nRow == nCol ? SpawnEmptyBlock() :SpawnBlock();
         }
 
         /// <summary>
@@ -75,5 +75,24 @@ namespace Ninez.Stage
             return stage;
         }
 
+        /// <summary>
+        /// 기본형 블럭을 요청한다.
+        /// </summary>
+        /// <returns>생성된 Block 객체</returns>
+        public Block SpawnBlock()
+        {
+            return BlockFactory.SpawnBlock(BlockType.BASIC);
+        }
+        
+        /// <summary>
+        /// BlockType.EMPTY인 블럭을 요청한다
+        /// </summary>
+        /// <returns>생성된 Block 객체</returns>
+        public Block SpawnEmptyBlock()
+        {
+            Block newBlock = BlockFactory.SpawnBlock(BlockType.EMPTY);
+
+            return newBlock;
+        }
     }
 }

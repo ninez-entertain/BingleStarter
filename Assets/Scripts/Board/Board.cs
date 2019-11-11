@@ -45,9 +45,12 @@ namespace Ninez.Board
             for (int nRow = 0; nRow < m_nRow; nRow++)
                 for (int nCol = 0; nCol < m_nCol; nCol++)
                 {
+                    //2.1 Cell GameObject 생성을 요청한다.GameObject가 생성되지 않는 경우에 null을 리턴한다.
                     Cell cell = m_Cells[nRow, nCol]?.InstantiateCellObj(cellPrefab, container); ;
                     cell?.Move(initX + nCol, initY + nRow);
 
+                    //2.2 Block GameObject 생성을 요청한다.
+                    //    GameObject가 생성되지 않는 경우에 null을 리턴한다. EMPTY 인 경우에 null
                     Block block = m_Blocks[nRow, nCol]?.InstantiateBlockObj(blockPrefab, container);
                     block?.Move(initX + nCol, initY + nRow);
                 }

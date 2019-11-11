@@ -32,6 +32,7 @@ namespace Ninez.Stage
 
         /// <summary>
         /// 스테이지를 구성한다.
+        /// Stage 객체를 할당받고, Stage 구성을 요청한다.
         /// </summary>
         void BuildStage()
         {

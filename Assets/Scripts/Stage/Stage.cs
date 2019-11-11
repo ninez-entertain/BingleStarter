@@ -54,7 +54,7 @@ namespace Ninez.Stage
                 for (int nCol = 0; nCol < maxCol; nCol++)
                 {
                     strCells.Append($"{cells[nRow, nCol].type}, ");
-                    strBlocks.Append($"{blocks[nRow, nCol].type}, ");
+                    strBlocks.Append($"{blocks[nRow, nCol].breed}, ");
                 }
 
                 strCells.Append("\n");

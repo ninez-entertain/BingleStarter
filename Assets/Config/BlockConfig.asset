@@ -12,4 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cec1f94de82904afe85d04099e4565df, type: 3}
   m_Name: BlockConfig
   m_EditorClassIdentifier: 
-  basicBlockSprites: []
+  basicBlockSprites:
+  - {fileID: 21300000, guid: d41dda32c8eb8489ca685fa8ac3618e7, type: 3}
+  - {fileID: 21300000, guid: b3fd567a9dce84bf48b0c4607ed40d05, type: 3}
+  - {fileID: 21300000, guid: c7c406757850f4eb9b62b6e8d99d8c19, type: 3}
+  - {fileID: 21300000, guid: 21604808ef1294d4996d607b17e012c8, type: 3}
+  - {fileID: 21300000, guid: b2675aa6f38e14b16b8e6f5dc2fb2500, type: 3}
+  - {fileID: 21300000, guid: a6a939ec3a316490fa4474595a16b1ce, type: 3}
