@@ -6,6 +6,13 @@ namespace Ninez.Board
 {
     public class Block
     {
+        //---------------------------------------------------------------------
+        // Members
+        //---------------------------------------------------------------------
+
+        //---------------------------------------------------------------------
+        // Properties 
+        //---------------------------------------------------------------------
         BlockType m_BlockType;
         public BlockType type
         {
@@ -35,10 +42,35 @@ namespace Ninez.Board
             }
         }
 
+        public Transform blockObj { get { return m_BlockBehaviour?.transform; } }
+
+        Vector2Int m_vtDuplicate;       // 블럭 젠, Shuffle시에 중복검사에 사용. stage file에서 생성시 (-1, -1)
+        //중복 검사시 사용 
+        public int horzDuplicate
+        {
+            get { return m_vtDuplicate.x; }
+            set { m_vtDuplicate.x = value; }
+        }
+
+        //중복 검사시 사용 
+        public int vertDuplicate
+        {
+            get { return m_vtDuplicate.y; }
+            set { m_vtDuplicate.y = value; }
+        }
+
+        //---------------------------------------------------------------------
+        // Constructor
+        //---------------------------------------------------------------------
+
         public Block(BlockType blockType)
         {
             m_BlockType = blockType;
         }
+
+        //---------------------------------------------------------------------
+        // Methods
+        //---------------------------------------------------------------------
 
         /// <summary>
         /// 블럭을 디스플레이하는 GameObject를 생성한다. 출력이 필요한 경우에만 생성한다.
@@ -84,6 +116,33 @@ namespace Ninez.Board
         public bool IsValidate()
         {
             return type != BlockType.EMPTY;
+        }
+
+        public void ResetDuplicationInfo()
+        {
+            m_vtDuplicate.x = 0;
+            m_vtDuplicate.y = 0;
+        }
+
+        /// <summary>
+        /// target Block과 같은 breed를 가지고 있는지 검사한다.
+        /// </summary>
+        /// <param name="target">비교할 대상 Block</param>
+        /// <returns>breed가 같으면 true, 다르면 false</returns>
+        public bool IsEqual(Block target)
+        {
+            if (IsMatchableBlock() && this.breed == target.breed)
+                return true;
+
+            return false;
+        }
+
+        /*
+         * 3 매칭으로 제거 가능한 블럭인지 검사한다.
+         */
+        public bool IsMatchableBlock()
+        {
+            return !(type == BlockType.EMPTY);
         }
     }
 }

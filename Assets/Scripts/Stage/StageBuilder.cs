@@ -118,7 +118,5 @@ namespace Ninez.Stage
 
             return newBlock;
         }
-
-
     }
 }
