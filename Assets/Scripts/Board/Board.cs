@@ -108,5 +108,10 @@ namespace Ninez.Board
 
             block.breed = genBreed;
         }
+
+        public bool IsSwipeable(int nRow, int nCol)
+        {
+            return m_Cells[nRow, nCol].type.IsBlockMovableType();
+        }
     }
 }
