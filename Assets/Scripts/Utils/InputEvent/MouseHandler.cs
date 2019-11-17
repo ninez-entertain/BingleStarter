@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace Ninez.Util
 {
-    public class MouseHandler : IBaseInputHandler
+    public class MouseHandler : IInputHandlerBase
     {
-        bool IBaseInputHandler.isTouchDown => Input.GetButtonDown("Fire1");
-        bool IBaseInputHandler.isTouchUp => Input.GetButtonUp("Fire1");
+        bool IInputHandlerBase.isInputDown => Input.GetButtonDown("Fire1");
+        bool IInputHandlerBase.isInputUp => Input.GetButtonUp("Fire1");
 
-        Vector2 IBaseInputHandler.touchPosition => Input.mousePosition;
+        Vector2 IInputHandlerBase.inputPosition => Input.mousePosition;
     }
 }

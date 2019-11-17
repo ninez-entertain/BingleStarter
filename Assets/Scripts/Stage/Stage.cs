@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Ninez.Board;
-using System;
+using Ninez.Util;
 
 namespace Ninez.Stage
 {
@@ -44,6 +44,11 @@ namespace Ninez.Stage
             m_Board.ComposeStage(cellPrefab, blockPrefab, container);
         }
 
+        #region Simple Methods
+        //----------------------------------------------------------------------
+        // 조회(get/set/is) 메소드
+        //----------------------------------------------------------------------
+
         /*
          * 보드안에서 발생한 이벤트인지 체크한다       
          */
@@ -66,7 +71,7 @@ namespace Ninez.Stage
          * 
          * @return 스와이프 가능하면 true
          */
-        public bool IsOnValideBlock(Vector2 point, out Vector2Int blockPos)
+        public bool IsOnValideBlock(Vector2 point, out BlockPos blockPos)
         {
             //1. World 좌표 -> 보드의 블럭 인덱스로 변환한다.
             Vector2 pos = new Vector2(point.x + (maxCol/ 2.0f), point.y + (maxRow / 2.0f));
@@ -74,11 +79,13 @@ namespace Ninez.Stage
             int nCol = (int)pos.x;
 
             //리턴할 블럭 인덱스 생성
-            blockPos = new Vector2Int(nCol, nRow);
+            blockPos = new BlockPos(nRow, nCol);
 
             //2. 스와이프 가능한지 체크한다.
             return board.IsSwipeable(nRow, nCol);
         }
+
+        #endregion 
 
         public void PrintAll()
         {
