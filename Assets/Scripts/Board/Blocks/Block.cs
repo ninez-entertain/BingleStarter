@@ -107,6 +107,11 @@ namespace Ninez.Board
             blockBehaviour.transform.position = new Vector3(x, y);
         }
 
+        public void MoveTo(Vector3 to, float duration)
+        {
+            m_BlockBehaviour.StartCoroutine(Util.Action2D.MoveTo(blockObj, to, duration));
+        }
+
         /// <summary>
         /// 유효한 블럭인지 체크한다.
         /// EMPTY 타입을 제외하고 모든 블럭이 유효한 것으로 간주한다.
@@ -143,6 +148,15 @@ namespace Ninez.Board
         public bool IsMatchableBlock()
         {
             return !(type == BlockType.EMPTY);
+        }
+
+        /*
+         * swipe 가능한 블럭인지 체크한다
+         * @param baseBlock 스와이프 기준 블럭, 기준블럭 종류에 따라서 가능 여부가 달라진다    
+         */
+        public bool IsSwipeable(Block baseBlock)
+        {
+            return true;
         }
     }
 }

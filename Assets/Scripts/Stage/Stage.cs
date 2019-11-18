@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Ninez.Board;
 using Ninez.Util;
+using Ninez.Core;
 
 namespace Ninez.Stage
 {
@@ -42,6 +43,53 @@ namespace Ninez.Stage
         internal void ComposeStage(GameObject cellPrefab, GameObject blockPrefab, Transform container)
         {
             m_Board.ComposeStage(cellPrefab, blockPrefab, container);
+        }
+
+        /*
+         * 유효한 스와이프인 경우 : 스와이프 방향으로 블럭 위치가 교체된다.
+         * 유효지 않는 스와이프 경우 : 화면에 스와이프 방향으로 액션을 보여주고, 원상태로 복구하는 액션 보여준다
+         */
+        public IEnumerator CoDoSwipeAction(int nRow, int nCol, Swipe swipeDir, Returnable<bool> actionResult)
+        {
+            actionResult.value = false; //코루틴 리턴값 RESET
+
+            //1. 스와이프되는 상대 블럭 위치를 구한다. (using SwipeDir Extension Method)
+            int nSwipeRow = nRow, nSwipeCol = nCol;
+            nSwipeRow += swipeDir.GetTargetRow(); //Right : +1, LEFT : -1
+            nSwipeCol += swipeDir.GetTargetCol(); //UP : +1, DOWN : -1
+
+            Debug.Assert(nRow != nSwipeRow || nCol != nSwipeCol, "Invalid Swipe : ({nSwipeRow}, {nSwipeCol})");
+            Debug.Assert(nSwipeRow >= 0 && nSwipeRow < maxRow && nSwipeCol >= 0 && nSwipeCol < maxCol, $"Swipe 타겟 블럭 인덱스 오류 = ({nSwipeRow}, {nSwipeCol}) ");
+
+            //2. 스와이프 가능한 블럭인지 체크한다. (인덱스 Validation은 호출 전에 검증됨)
+            if (m_Board.IsSwipeable(nSwipeRow, nSwipeCol))
+            {
+                //2.1 스와이프 대상 블럭(소스, 타겟)과 각 블럭의 이동전 위치를 저장한다.
+                Block targetBlock = blocks[nSwipeRow, nSwipeCol];
+                Block baseBlock = blocks[nRow, nCol];
+                Debug.Assert(baseBlock != null && targetBlock != null);
+
+                Vector3 basePos = baseBlock.blockObj.transform.position;
+                Vector3 targetPos = targetBlock.blockObj.transform.position;
+
+                //2.2 스와이프 액션을 실행한다.
+                if (targetBlock.IsSwipeable(baseBlock))
+                {
+                    //2.2.1 상대방의 블럭 위치로 이동하는 애니메이션을 수행한다
+                    baseBlock.MoveTo(targetPos, Constants.SWIPE_DURATION);
+                    targetBlock.MoveTo(basePos, Constants.SWIPE_DURATION);
+
+                    yield return new WaitForSeconds(Constants.SWIPE_DURATION);
+
+                    //2.2.2 Board에 저장된 블럭의 위치를 교환한다
+                    blocks[nRow, nCol] = targetBlock;
+                    blocks[nSwipeRow, nSwipeCol] = baseBlock;
+
+                    actionResult.value = true;
+                }
+            }
+
+            yield break;
         }
 
         #region Simple Methods
@@ -85,7 +133,23 @@ namespace Ninez.Stage
             return board.IsSwipeable(nRow, nCol);
         }
 
-        #endregion 
+
+        /**
+         * 주어진 위치(nRow, nCol)에서 발생된 스와이프 액션이 유효한지 체크한다.
+         */
+        public bool IsValideSwipe(int nRow, int nCol, Swipe swipeDir)
+        {
+            switch (swipeDir)
+            {
+                case Swipe.DOWN: return nRow > 0; ;
+                case Swipe.UP: return nRow < maxRow - 1;
+                case Swipe.LEFT: return nCol > 0;
+                case Swipe.RIGHT: return nCol < maxCol - 1;
+                default:
+                    return false;
+            }
+        }
+        #endregion
 
         public void PrintAll()
         {
