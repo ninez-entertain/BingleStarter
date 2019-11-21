@@ -4,6 +4,7 @@ using UnityEngine;
 using Ninez.Board;
 using Ninez.Util;
 using Ninez.Core;
+using System;
 
 namespace Ninez.Stage
 {
@@ -90,6 +91,20 @@ namespace Ninez.Stage
             }
 
             yield break;
+        }
+
+        /*
+         * 스테이지를 구성하는 전체 보드를 평가한다.   
+         * 각 블럭에 지정된 상태/종류/카운터 등에 따라서 블럭의 다음 상태를 변경한다.
+         * ex) Match된 블럭은 제거되고 카운터가 있는 경우 해당되는 경우만큼 감소하는 등
+         * 
+         * 호출된 후의 상태 : Block 객체 제거, Block GameObject 제거
+         * 
+         * @return 매치된 블럭이 있는 경우 true, 없으면 false
+         */
+        public IEnumerator Evaluate(Returnable<bool> matchResult)
+        {
+            yield return m_Board.Evaluate(matchResult);
         }
 
         #region Simple Methods

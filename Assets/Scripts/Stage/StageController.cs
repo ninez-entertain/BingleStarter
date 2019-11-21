@@ -54,7 +54,7 @@ namespace Ninez.Stage
         void BuildStage()
         {
             //1. Stage를 구성한다.
-            m_Stage = StageBuilder.BuildStage(nStage : 2);
+            m_Stage = StageBuilder.BuildStage(nStage : 1);
             m_ActionManager = new ActionManager(m_Container, m_Stage);
 
             //2. 생성한 stage 정보를 이용하여 씬을 구성한.
@@ -93,7 +93,7 @@ namespace Ninez.Stage
                 //2.2 스와이프 방향을 구한다.
                 Swipe swipeDir = m_InputManager.EvalSwipeDir(m_ClickPos, point);
 
-                Debug.Log($"Swipe : {swipeDir} , Block = {m_BlockDownPos}");
+                //Debug.Log($"Swipe : {swipeDir} , Block = {m_BlockDownPos}");
 
                 if (swipeDir != Swipe.NA)
                     m_ActionManager.DoSwipeAction(m_BlockDownPos.row, m_BlockDownPos.col, swipeDir);

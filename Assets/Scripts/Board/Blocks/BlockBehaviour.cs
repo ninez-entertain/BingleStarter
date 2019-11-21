@@ -47,5 +47,13 @@ namespace Ninez.Board
                 m_SpriteRenderer.sprite = m_BlockConfig.basicBlockSprites[(int)m_Block.breed];
             }
         }
+
+        /*
+         * 블럭을 제거한다.  
+         */
+        public void DoActionClear()
+        {
+            Destroy(gameObject);
+        }
     }
 }

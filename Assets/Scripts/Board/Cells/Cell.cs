@@ -68,6 +68,11 @@ namespace Ninez.Board
         {
             cellBehaviour.transform.position = new Vector3(x, y);
         }
+
+        public bool IsObstracle()
+        {
+            return type == CellType.EMPTY;
+        }
     }
 }
 
