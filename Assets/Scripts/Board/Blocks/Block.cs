@@ -73,6 +73,24 @@ namespace Ninez.Board
             set { m_nDurability = value; }
         }
 
+        protected BlockActionBehaviour m_BlockActionBehaviour;
+
+        public bool isMoving
+        {
+            get
+            {
+                return blockObj != null && m_BlockActionBehaviour.isMoving;
+            }
+        }
+
+        public Vector2 dropDistance
+        {
+            set
+            {
+                m_BlockActionBehaviour?.MoveDrop(value);
+            }
+        }
+
         //---------------------------------------------------------------------
         // Constructor
         //---------------------------------------------------------------------
@@ -114,6 +132,7 @@ namespace Ninez.Board
 
             //3. Block 오브젝트에 적용된 BlockBehaviour 컴포너트를 보관한다.
             this.blockBehaviour = newObj.transform.GetComponent<BlockBehaviour>();
+            m_BlockActionBehaviour = newObj.transform.GetComponent<BlockActionBehaviour>();
 
             return this;
         }

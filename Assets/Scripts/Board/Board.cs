@@ -7,6 +7,8 @@ using Ninez.Util;
 
 namespace Ninez.Board
 {
+    using IntIntKV = KeyValuePair<int, int>;
+
     public class Board
     {
         int m_nRow;
@@ -245,6 +247,86 @@ namespace Ninez.Board
             blockList.ForEach(block => block.UpdateBlockStatusMatched((MatchType)nMatchCount));
         }
 
+        /*
+         * 전체 블럭 구성을 재배치한다.
+         * 비어있는 블럭을 위에 있는 블럭으로 채운다.
+         * - MATCH 블럭이 제거된 후에 호출된다.
+         * 
+         * @param unfilledBlocks 다른 블럭으로 채워지지 않고 남겨진 블럭 위치를 리턴받기 위해서 Caller에서 전달한다.  
+         */
+        public IEnumerator ArrangeBlocksAfterClean(List<IntIntKV> unfilledBlocks, List<Block> movingBlocks)
+        {
+            SortedList<int, int> emptyBlocks = new SortedList<int, int>();
+            List<IntIntKV> emptyRemainBlocks = new List<IntIntKV>();
+
+            for (int nCol = 0; nCol < m_nCol; nCol++)
+            {
+                emptyBlocks.Clear();
+
+                //1.같은 열(col)에 빈 블럭을 수집한다.
+                //  현재 col의 다른 row의 비어있는 븝럭 인덱스를 수집한다. sortedList이므로 첫번째 노드가 가장 아래쪽 블럭 위치이다
+                for (int nRow = 0; nRow < m_nRow; nRow++)
+                {
+                    if (CanBlockBeAllocatable(nRow, nCol))
+                        emptyBlocks.Add(nRow, nRow);
+                }
+
+                //아래쪽에 비었는 블럭이 없는 경	
+                if (emptyBlocks.Count == 0)
+                    continue;
+
+                //2. 이동이 가능한 블럭을 비어있는 하단 위치로 이동한다.
+
+                //2.1 가장 아래쪽부터 비어있는 블럭을 처리한다
+                IntIntKV first = emptyBlocks.First();
+
+                //2.2 비어있는 블럭 위쪽 방향으로 이동 가능한 블럭을 탐색하면서 빈 블럭을 채워나간다
+                for (int nRow = first.Value + 1; nRow < m_nRow; nRow++)
+                {
+                    Block block = m_Blocks[nRow, nCol];
+
+                    //2.2.1 이동 가능한 아이템이 아닌 경우 pass
+                    if (block == null || m_Cells[nRow, nCol].type == CellType.EMPTY) //TODO EMPTY를 직접체크하지 않고 이러한 부류를 함수로 체크
+                        continue;
+
+                    //2.2.2 드롭을 방해하는 cell이 있는 경우 해당 cell 아래쪽은 비워둔다 (직전방향 드롭하지 않음) 
+                    //      아래쪽 비어있는 블럭은 이동가능한 목록에서 제거한다
+
+                    //2.2.3 이동이 필요한 블럭 발견
+                    block.dropDistance = new Vector2(0, nRow - first.Value);    //GameObject 애니메이션 이동
+                    movingBlocks.Add(block);
+
+                    //2.2.4 빈 공간으로 이동
+                    Debug.Assert(m_Cells[first.Value, nCol].IsObstracle() == false, $"{m_Cells[first.Value, nCol]}");
+                    m_Blocks[first.Value, nCol] = block;        // 이동될 위치로 Board에서 저장된 위치 이동
+
+                    //2.2.5 다른 곳으로 이동했음으로 현재 위치는 비워둔다
+                    m_Blocks[nRow, nCol] = null;
+
+                    //2.2.6 비어있는 블럭 리스트에서 사용된 첫번째 노드(first)를 삭제한다
+                    emptyBlocks.RemoveAt(0);
+
+                    //2.2.7 현재 위치의 블럭이 다른 위치로 이동했으므로 현재 위치가 비어있게 된다.
+                    //그러므로 비어있는 블럭을 보관하는 emptyBolocks에 추가한다
+                    emptyBlocks.Add(nRow, nRow);
+
+                    //2.2.8 다음(Next) 비어었는 블럭을 처리하도록 기준을 변경한다
+                    first = emptyBlocks.First();
+                    nRow = first.Value; //Note : 빈곳 바로 위부터 처리하도록 위치 조정, for 문에서 nRow++ 하기 때문에 +1을 하지 않는다
+                }
+            }
+
+            yield return null;
+
+            //드롭으로 채워지지 않는 블럭이 있는 경우(왼쪽 아래 순으로 들어있음)
+            if (emptyRemainBlocks.Count > 0)
+            {
+                unfilledBlocks.AddRange(emptyRemainBlocks);
+            }
+
+            yield break;
+        }
+
         /// <summary>
         /// 퍼즐의 시작 X 위치를 구한다, left - top좌표
         /// </summary>
@@ -297,6 +379,17 @@ namespace Ninez.Board
         public bool IsSwipeable(int nRow, int nCol)
         {
             return m_Cells[nRow, nCol].type.IsBlockMovableType();
+        }
+
+        /*
+         * 블럭이 지정된 위치에 새로 할당 될 수 있는지 체크한다
+         */
+        bool CanBlockBeAllocatable(int nRow, int nCol)
+        {
+            if (!m_Cells[nRow, nCol].type.IsBlockAllocatableType())
+                return false;
+
+            return m_Blocks[nRow, nCol] == null;
         }
     }
 }

@@ -19,12 +19,6 @@ namespace Ninez.Board
             UpdateView(false);
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
         internal void SetBlock(Block block)
         {
             m_Block = block;
