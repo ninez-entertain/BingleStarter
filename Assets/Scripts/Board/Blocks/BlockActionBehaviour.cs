@@ -15,6 +15,7 @@ namespace Ninez.Board
      */
 	public class BlockActionBehaviour : MonoBehaviour
 	{
+        [SerializeField] BlockConfig m_BlockConfig;
         public bool isMoving { get; set; }
 
 		Queue<Vector3> m_MovementQueue = new Queue<Vector3>();    //x, y, z = acceleration
@@ -41,7 +42,10 @@ namespace Ninez.Board
             {
                 Vector2 vtDestination = m_MovementQueue.Dequeue();
 
-                float duration = Core.Constants.DROP_TIME;// blockConfig.dropSpeed[(int)Mathf.Abs(vtDestination.y) - 1];
+                //int dropIndex = System.Math.Min(9, System.Math.Max(1, System.Math.Max((int)Mathf.Abs(vtDestination.y), (int)Mathf.Abs(vtDestination.x))));
+                int dropIndex = System.Math.Min(9, System.Math.Max(1, (int)Mathf.Abs(vtDestination.y)));
+                float duration = m_BlockConfig.dropSpeed[dropIndex-1];
+                Debug.Log($"Drop speed = {dropIndex}, {duration}");
                 yield return CoStartDropSmooth(vtDestination, duration * acc);
             }
 
