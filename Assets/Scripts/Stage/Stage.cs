@@ -43,7 +43,7 @@ namespace Ninez.Stage
         /// <param name="container">Cell/Board GameObject의 부모 GameObject</param>
         internal void ComposeStage(GameObject cellPrefab, GameObject blockPrefab, Transform container)
         {
-            m_Board.ComposeStage(cellPrefab, blockPrefab, container);
+            m_Board.ComposeStage(cellPrefab, blockPrefab, container, m_StageBuilder);
         }
 
         /*
@@ -119,7 +119,10 @@ namespace Ninez.Stage
             //1. 제거된 블럭에 따라, 블럭 재배치(상위 -> 하위 이동/애니메이션)
             yield return m_Board.ArrangeBlocksAfterClean(unfilledBlocks, movingBlocks);
 
-            //2. 블럭 재생성 후, 매치블럭 제거하기 위한 루프를 돌때
+            //2. 재배치 완료(이동 애니메이션 완료)후, 비어있는 블럭 다시 생성
+            yield return m_Board.SpawnBlocksAfterClean(movingBlocks);
+
+            //3. 블럭 재생성 후, 매치블럭 제거하기 위한 루프를 돌때
             //   유저에게 생성된 블럭이 잠시동안 보이도록 다른 블럭이 드롭되는 동안 대기한다.
             yield return WaitForDropping(movingBlocks);
         }

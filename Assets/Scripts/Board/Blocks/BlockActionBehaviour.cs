@@ -42,10 +42,8 @@ namespace Ninez.Board
             {
                 Vector2 vtDestination = m_MovementQueue.Dequeue();
 
-                //int dropIndex = System.Math.Min(9, System.Math.Max(1, System.Math.Max((int)Mathf.Abs(vtDestination.y), (int)Mathf.Abs(vtDestination.x))));
                 int dropIndex = System.Math.Min(9, System.Math.Max(1, (int)Mathf.Abs(vtDestination.y)));
                 float duration = m_BlockConfig.dropSpeed[dropIndex-1];
-                Debug.Log($"Drop speed = {dropIndex}, {duration}");
                 yield return CoStartDropSmooth(vtDestination, duration * acc);
             }
 
