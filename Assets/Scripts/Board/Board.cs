@@ -120,6 +120,8 @@ namespace Ninez.Board
 
             //3.3 매칭된 블럭을 제거한다. 
             clearBlocks.ForEach((block) => block.Destroy());
+            //3.3.1 블럭이 제거되는 동안 잠시 Delay, 블럭 제거가 순식간에 일어나는 것에 약간 지연을 시킴
+            yield return new WaitForSeconds(0.15f);
 
             //3.4 3매칭 블럭 있는 경우 true 설정   
             matchResult.value = true;
